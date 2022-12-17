@@ -1,0 +1,36 @@
+<!DOCTYPE etl SYSTEM "http://scriptella.org/dtd/etl.dtd">
+<etl>
+    <description>Filtering population file, and better col names</description>
+
+    <!-- Connection declarations -->
+    <connection id="in" driver="csv" url="pop-bloated.csv">
+        <!-- Series Name,  Series Code,   Country Name,  Country Code,  1960 [YR1960],
+            1961 [YR1961], 1962 [YR1962], 1963 [YR1963], 1964 [YR1964], 1965 [YR1965],
+            1966 [YR1966], 1967 [YR1967], 1968 [YR1968], 1969 [YR1969], 1970 [YR1970],
+            1971 [YR1971], 1972 [YR1972], 1973 [YR1973], 1974 [YR1974], 1975 [YR1975],
+            1976 [YR1976], 1977 [YR1977], 1978 [YR1978], 1979 [YR1979], 1980 [YR1980],
+            1981 [YR1981], 1982 [YR1982], 1983 [YR1983], 1984 [YR1984], 1985 [YR1985],
+            1986 [YR1986], 1987 [YR1987], 1988 [YR1988], 1989 [YR1989], 1990 [YR1990],
+            1991 [YR1991], 1992 [YR1992], 1993 [YR1993], 1994 [YR1994], 1995 [YR1995],
+            1996 [YR1996], 1997 [YR1997], 1998 [YR1998], 1999 [YR1999], 2000 [YR2000],
+            2001 [YR2001], 2002 [YR2002], 2003 [YR2003], 2004 [YR2004], 2005 [YR2005],
+            2006 [YR2006], 2007 [YR2007], 2008 [YR2008], 2009 [YR2009], 2010 [YR2010],
+            2011 [YR2011], 2012 [YR2012], 2013 [YR2013], 2014 [YR2014], 2015 [YR2015],
+            2016 [YR2016], 2017 [YR2017], 2018 [YR2018], 2019 [YR2019], 2020 [YR2020],
+            2021 [YR2021] -->
+    </connection>
+    <connection id="out" driver="csv" url="pippo.csv">
+    </connection>
+
+    <script connection-id="out">
+        country,YR1960,YR1961,YR1962,YR1963,YR1964,YR1965,YR1966,YR1967,YR1968,YR1969,YR1970,YR1971,YR1972,YR1973,YR1974,YR1975,YR1976,YR1977,YR1978,YR1979,YR1980,YR1981,YR1982,YR1983,YR1984,YR1985,YR1986,YR1987,YR1988,YR1989,YR1990,YR1991,YR1992,YR1993,YR1994,YR1995,YR1996,YR1997,YR1998,YR1999,YR2000,YR2001,YR2002,YR2003,YR2004,YR2005,YR2006,YR2007,YR2008,YR2009,YR2010,YR2011,YR2012,YR2013,YR2014,YR2015,YR2016,YR2017,YR2018,YR2019,YR2020,YR2021
+    </script>
+
+    <query connection-id="in">
+        <!-- Empty query selects all -->
+        <script connection-id="out">
+            <!-- Throw the columns in the other csv. Refer to the values by col number (start at 1) -->
+            $4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30,$31,$32,$33,$34,$35,$36,$37,$38,$39,$40,$41,$42,$43,$44,$45,$46,$47,$48,$49,$50,$51,$52,$53,$54,$55,$56,$57,$58,$59,$60,$61,$62,$63,$64,$65,$66
+        </script>
+    </query>
+</etl>

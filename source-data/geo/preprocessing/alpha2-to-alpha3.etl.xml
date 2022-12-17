@@ -1,0 +1,37 @@
+<!DOCTYPE etl SYSTEM "http://scriptella.org/dtd/etl.dtd">
+<etl>
+    <description>Eliminating the one occurrence of ISO Alpha-2, replacing w/ the more common Alpha-3.</description>
+
+    <!-- Connection declarations -->
+    <connection id="country-data" driver="csv" url="country-capitals.csv">
+        <!-- CountryName, CapitalName, CapitalLatitude, CapitalLongitude, CountryCode, ContinentName -->
+        null_string=NULL
+    </connection>
+    <connection id="iso-data" driver="csv" url="iso-3166-1.csv">
+        <!-- Name, Alpha2, Alpha3 -->
+    </connection>
+    <connection id="out" driver="csv" url="preprocessed.csv">
+        null_string=NULL
+    </connection>
+
+    <!-- Write header line -->
+    <script connection-id="out">
+        isocode,caplat,caplon,continent
+    </script>
+
+    <query connection-id="country-data">
+        <!-- Empty query selects all on CSV -->
+        <!-- For each matching line, next query/script is executed. -->
+        <!-- The elements of this line are available as variables named like the columns -->
+        <!-- (see comments in connection declarations) -->
+        <query connection-id="iso-data">
+            <!-- Find the row of the country with the given Alpha-2 code -->
+            ,$CountryCode,
+            <script connection-id="out">
+                <!-- Write a line in the output w/ the retrieved Alpha-3 code... -->
+                <!-- ...and add the relevant data from the first CSV -->
+                $Alpha3,$CapitalLatitude,$CapitalLongitude,$ContinentName
+            </script>
+        </query>
+    </query>
+</etl>
