@@ -16,20 +16,13 @@
 *But check if there are some nations that appear only there first*
 
 
-# 2020_Olympics_Dataset.csv
+# Summer_olympic_Medals.csv
 
-### athlete_event_tokyo(~~rownum,~~ code, name, gender, age, noc, country, ~~discipline,~~ sport, event, ~~rank,~~ medal)
+### country_medals(year, hostcountry, hostcity, countryname, countrycode, gold, silver, bronze)
 
-*Null is "NA"*
+*Already-counted data since FOL can't count*
 
-*In theory country is semi-irrelevant too, there's the Wikipedia table*
-
-
-# Tokyo-Olympic-Medals...
-
-*TODO semi-useless, can/should recompute it from the detailed data, and also include previous games in the count*
-
-*Or maybe we want to take some already-counted data, since FOL can't count?*
+*(Sì, è la mamma di hosted, ma questa l'ho messa dopo, quindi per ora chissene)*
 
 
 # world-banks-income-groups.csv
@@ -54,7 +47,7 @@
 
 # country-data.csv
 
-### countrydata(isocode, caplat, caplon, countrycode, continent)
+### countrydata(isocode, caplat, caplon, continent)
 
 *Preprocessing: fixed a couple "Washington, D.C.", removed useless columns, replaced country codes with ISO Alpha-3 (was only occurrence of Alpha-2, decided to simplify)*
 
@@ -77,3 +70,23 @@
 *Preprocessing: turned into CSV (was HTML)*
 
 *Historical countries may be useless. Economic data is only from 1960 anyway.*
+
+
+
+
+<!--
+# mathematical stuff
+
+I can define this, right? Do I do it here? Or in the mapping?
+
+### plus(a,b,s)
+Equivalent to the natural number domain expression, a + b == s
+
+### EquivalentNames(n1, n2)
+Set of all and only the string pairs that contain exactly the same words, regardless of order and capitalization.
+
+Examples:
+* ("PETRI Francesco", "Francesco Petri") &in; EquivalentNames 
+* ("Francesco Petri", "SANADA Akihiko") &notin; EquivalentNames
+
+-->

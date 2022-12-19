@@ -1,48 +1,5 @@
 cc is Country Code. It's always ISO (hopefully).
 
-# VERSIONE TABULARE
-
-<!--
-## Athlete/9
-*(id, name, sex, age, cc, year, sport, event, medal)*
--->
-
-## AthleteInfo/4
-*(id, name, sex, cc)*
-
-## AthleteEvent/6
-*(id, year, age, sport, event, medal)*
-
-## CountryMedals/5
-*(cc, year, gold, silver, bronze)*
-
-*Including a special value for year, "TOTAL" (or NULL)*
-
-## GameHostedIn/2
-*(year, cc)*
-
-## CountryIncome/3
-*(cc, year, class)*
-
-## CountryPopulation/3
-*(cc, year, population)*
-
-## IsAtLatitude/2
-*(what, lat)*
-
-*Conceptually, "what" can be an athlete id, a country code or an Olympic Games edition (represented by its year) without need for separate predicates, I think. The implementation might need us to do separate tables (or one for the countries and handle the rest with joins), however.*
-
-## IsInContinent/2
-*(what, continent)*
-
-*As above*
-
-
-
-
-
-# VERSIONE OBJECT-ORIENTED
-
 *(medals, events and continents are not first-class citizens, so they don't have any /1 predicates)*
 
 ## Athlete/1
@@ -88,7 +45,7 @@ cc is Country Code. It's always ISO (hopefully).
 ## HadPopulation/3
 *(cc, year, population)*
 
-## IsAtLatitude/2
+## HasCapitalLatitude/2
 *(what, lat)*
 
 *For countries primarily, and consequently for athletes and editions too*
