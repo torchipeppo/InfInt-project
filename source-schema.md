@@ -1,6 +1,6 @@
 # athlete_events-upto2016.csv
 
-### athlete_event(id, name, sex, age, ~~height, weight, team,~~ noc, year, season, city, sport, event, medal)
+### athlete_event(id, name, sex, age, ~~height, weight, team,~~ noc, year, ~~season,~~ city, sport, event, medal)
 
 *Null is "NA"*
 
