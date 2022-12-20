@@ -8,17 +8,15 @@
 
 &forall; isocode, name . (&exist; id,n,s,a,h,w,t,noc,y,se,c,sp,e,m,cf . athlete_event(id, n, s, a, h, w, t, noc, y, se, c, sp, e, m) &and; countrycodes(name, noc, cf, isocode) &xrarr; HasName(isocode, name))
 
-&forall; year, city . (&exist; id,n,s,a,h,w,t,noc,year,se,c,sp,e,m,hc . athlete_event(id, n, s, a, h, w, t, noc, year, se, c, sp, e, m) &and; hosted(year, hc, city) &xrarr; HasName(year, city))
-
 &forall; id, sex . (&exist; n,a,h,w,t,noc,y,se,c,sp,e,m . athlete_event(id, n, sex, a, h, w, t, noc, y, se, c, sp, e, m) &xrarr; HasSex(id, sex))
 
 &forall; id, year, age . (&exist; n,s,h,w,t,noc,se,c,sp,e,m . athlete_event(id, n, s, age, h, w, t, noc, year, se, c, sp, e, m) &xrarr; HadAge(id, year, age))
 
 &forall; id, year, sport, event, medal . (&exist; n,s,a,h,w,t,noc,se,c . athlete_event(id, n, s, a, h, w, t, noc, year, se, c, sport, event, medal) &xrarr; ParticipatedWithResults(id, year, sport, event, medal))
 
-&forall; id, isocode . (&exist; n,s,a,h,w,t,noc,y,se,c,sp,e,m,cn,cf . athlete_event(id, n, s, a, h, w, t, noc, y, se, c, sp, e, m) &and; countrycodes(cn, noc, cf, isocode) &xrarr; IsInCountry(id, isocode))
+&forall; id, isocode . (&exist; n,s,a,h,w,t,noc,y,se,c,sp,e,m,cn,cf . athlete_event(id, n, s, a, h, w, t, noc, y, se, c, sp, e, m) &and; countrycodes(cn, noc, cf, isocode) &xrarr; AthleteIsInCountry(id, isocode))
 
-&forall; year, isocode . (&exist; id,n,s,a,h,w,t,noc,se,c,sp,e,m,cname,city,ci,cf . athlete_event(id, n, s, a, h, w, t, noc, year, se, c, sp, e, m) &and; hosted(year, cname, city) &and; countrycodes(cname, ci, cf, isocode) &xrarr; IsInCountry(year, isocode))
+&forall; year, isocode . (&exist; id,n,s,a,h,w,t,noc,se,c,sp,e,m,cname,city,ci,cf . athlete_event(id, n, s, a, h, w, t, noc, year, se, c, sp, e, m) &and; hosted(year, cname, city) &and; countrycodes(cname, ci, cf, isocode) &xrarr; EditionIsInCountry(year, isocode))
 
 &forall; isocode, year, gold, silver, bronze . (&exist; hco, hci, cn, noc, cn2, cf . country_medals(year, hco, hci, cn, noc, gold, silver, bronze) &and; countrycodes(cn2, noc, cf, isocode) &xrarr; GotTotalMedals(isocode, year, gold, silver, bronze))
 
@@ -34,10 +32,6 @@
 
 &forall; id, caplat . (&exist; n,s,a,h,w,t,noc,y,se,c,sp,e,m,cn,cf,caplon,continent . athlete_event(id, n, s, a, h, w, t, noc, y, se, c, sp, e, m) &and; countrycodes(cn, noc, cf, isocode) &and; countrydata(isocode, caplat, caplon, continent) &xrarr; HasCapitalLatitude(id, caplat))
 
-&forall; year, caplat . (&exist; id,n,s,a,h,w,t,noc,se,c,sp,e,m,cname,city,ci,cf,caplon,continent . athlete_event(id, n, s, a, h, w, t, noc, year, se, c, sp, e, m) &and; hosted(year, cname, city) &and; countrycodes(cname, ci, cf, isocode) &and; countrydata(isocode, caplat, caplon, continent) &xrarr; HasCapitalLatitude(year, caplat))
+&forall; isocode, continent . (&exist; caplat, caplon . countrydata(isocode, caplat, caplon, continent) &xrarr; IsInContinent(isocode, continent))
 
-&forall; isocode, caplat . (&exist; caplat, caplon . countrydata(isocode, caplat, caplon, continent) &xrarr; IsInContinent(isocode, continent))
-
-&forall; id, caplat . (&exist; n,s,a,h,w,t,noc,y,se,c,sp,e,m,cn,cf,caplat,caplon . athlete_event(id, n, s, a, h, w, t, noc, y, se, c, sp, e, m) &and; countrycodes(cn, noc, cf, isocode) &and; countrydata(isocode, caplat, caplon, continent) &xrarr; IsInContinent(id, continent))
-
-&forall; year, caplat . (&exist; id,n,s,a,h,w,t,noc,se,c,sp,e,m,cname,city,ci,cf,caplat,caplon . athlete_event(id, n, s, a, h, w, t, noc, year, se, c, sp, e, m) &and; hosted(year, cname, city) &and; countrycodes(cname, ci, cf, isocode) &and; countrydata(isocode, caplat, caplon, continent) &xrarr; IsInContinent(year, continent))
+&forall; id, continent . (&exist; n,s,a,h,w,t,noc,y,se,c,sp,e,m,cn,cf,caplat,caplon . athlete_event(id, n, s, a, h, w, t, noc, y, se, c, sp, e, m) &and; countrycodes(cn, noc, cf, isocode) &and; countrydata(isocode, caplat, caplon, continent) &xrarr; IsInContinent(id, continent))

@@ -16,7 +16,7 @@ cc is Country Code. It's always ISO (hopefully).
 ## HasName/2
 *(what, name)*
 
-*For athlete IDs and country codes. And maybe also editions, they may have the name of the city they were in...*
+*For athlete IDs and country codes. (Not editions, years are int and not varchar. It's not worth it.)*
 
 ## HasSex/2
 *(id, sex)*
@@ -27,10 +27,13 @@ cc is Country Code. It's always ISO (hopefully).
 ## ParticipatedWithResults/5
 *(id, year, sport, event, medal)*
 
-## IsInCountry/2
-*(what, cc)*
+## AthleteIsInCountry/2
+*(id, cc)*
 
-*For athletes and editions*
+## EditionIsInCountry/2
+*(year, cc)*
+
+*(Different data types, not worth it to try and make one table. I prefer having year as int for numerical operations/comparisons.)*
 
 ## GotTotalMedals/5
 *(cc, year, gold, silver, bronze)*
@@ -48,7 +51,7 @@ cc is Country Code. It's always ISO (hopefully).
 ## HasCapitalLatitude/2
 *(what, lat)*
 
-*For countries primarily, and consequently for athletes and editions too*
+*For countries primarily, also for athletes*
 
 ## IsInContinent/2
 *(what, continent)*
