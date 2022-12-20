@@ -1,0 +1,209 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"></head><body><table>
+<thead><tr>
+
+<th>Country</th>
+<th>IOC</th>
+<th>FIFA</th>
+<th>ISO?</th></tr></thead><tbody>
+<tr>
+
+<td>British Honduras</td>
+<td>HBR</td>
+<td>BHO</td>
+<td>HIST_HBR</td></tr>
+<tr>
+
+<td>Burma</td>
+<td>BIR</td>
+<td>BUR</td>
+<td>HIST_BIR</td></tr>
+<tr>
+
+<td>Ceylon</td>
+<td>CEY</td>
+<td>CEY</td>
+<td>HIST_CEY</td></tr>
+<tr>
+
+<td>Dahomey</td>
+<td>DAH</td>
+<td>DAH</td>
+<td>HIST_DAH</td></tr>
+<tr>
+
+<td>Czechoslovakia</td>
+<td>TCH</td>
+<td>TCH</td>
+<td>HIST_TCH</td></tr>
+<tr>
+
+<td>East Germany</td>
+<td>GDR</td>
+<td>GDR</td>
+<td>HIST_GDR</td></tr>
+<tr>
+
+<td>Khmer Republic</td>
+<td>KHM</td>
+<td>null</td>
+<td>HIST_KHM</td></tr>
+<tr>
+
+<td>Malaya</td>
+<td>MAL</td>
+<td>null</td>
+<td>HIST_MAL</td></tr>
+<tr>
+
+<td>Netherlands Antilles</td>
+<td>AHO</td>
+<td>ANT</td>
+<td>HIST_AHO</td></tr>
+<tr>
+
+<td>North Borneo</td>
+<td>NBO</td>
+<td>NBO</td>
+<td>HIST_NBO</td></tr>
+<tr>
+
+<td>North Yemen</td>
+<td>YAR</td>
+<td>NYE</td>
+<td>HIST_YAR</td></tr>
+<tr>
+
+<td>Northern Rhodesia</td>
+<td>NRH</td>
+<td>NRH</td>
+<td>HIST_NRH</td></tr>
+<tr>
+
+<td>Rhodesia</td>
+<td>RHO</td>
+<td>RHO</td>
+<td>HIST_RHO</td></tr>
+<tr>
+
+<td>Serbia and Montenegro</td>
+<td>SCG</td>
+<td>SCG</td>
+<td>HIST_SCG</td></tr>
+<tr>
+
+<td>South Yemen</td>
+<td>YMD</td>
+<td>SYE</td>
+<td>HIST_YMD</td></tr>
+<tr>
+
+<td>Soviet Union</td>
+<td>URS</td>
+<td>URS</td>
+<td>HIST_URS</td></tr>
+<tr>
+
+<td>Upper Volta</td>
+<td>VOL</td>
+<td>UPV</td>
+<td>HIST_VOL</td></tr>
+<tr>
+
+<td>Viet-Nam, Democratic Republic of</td>
+<td>null</td>
+<td>VNO</td>
+<td>HIST_null</td></tr>
+<tr>
+
+<td>Viet Nam, Republic of</td>
+<td>VNM</td>
+<td>VSO</td>
+<td>HIST_VNM</td></tr>
+<tr>
+
+<td>West Germany</td>
+<td>FRG</td>
+<td>FRG</td>
+<td>HIST_FRG</td></tr>
+<tr>
+
+<td>Yugoslavia, Federal Republic of</td>
+<td>YUG</td>
+<td>YUG</td>
+<td>HIST_YUG</td></tr>
+<tr>
+
+<td>Yugoslavia, Socialist Federal Republic of</td>
+<td>YUG</td>
+<td>YUG</td>
+<td>HIST_YUG</td></tr>
+<tr>
+
+<td>Zaire</td>
+<td>ZAI</td>
+<td>ZAI</td>
+<td>HIST_ZAI</td></tr></tbody></table>
+
+<!-- PREPROCESSING CODE -->
+
+<script>
+    function dissolve(e) {
+        par = e.parentElement
+        par.innerHTML = e.innerHTML
+    }
+
+    // start blastin
+    Array.from(document.getElementsByTagName("caption")).forEach(e=>e.remove())
+    Array.from(document.getElementsByTagName("tfoot")).forEach(e=>e.remove())
+    Array.from(document.getElementsByTagName("img")).forEach(e=>e.remove())
+    Array.from(document.getElementsByTagName("link")).forEach(e=>e.remove())
+    Array.from(document.getElementsByTagName("hr")).forEach(e=>e.remove())
+    Array.from(document.getElementsByTagName("small")).forEach(e=>e.remove())
+    Array.from(document.querySelectorAll("span.flagicon")).forEach(e=>e.remove())
+    Array.from(document.querySelectorAll("td.table-yes")).forEach(e=>e.remove())
+    Array.from(document.querySelectorAll("td.table-no")).forEach(e=>e.remove())
+
+    Array.from(document.getElementsByTagName("a")).forEach(dissolve)
+    Array.from(document.querySelectorAll("span.monospaced")).forEach(dissolve)
+    Array.from(document.querySelectorAll("span[data-sort-value]")).forEach(dissolve)
+
+    Array.from(document.querySelectorAll("sup")).forEach(sup => {
+        sup.parentElement.innerHTML = "null"
+    })
+
+    Array.from(document.querySelectorAll("tr")).forEach(tr => {
+        // eliminate: flag, ISO
+        tr.removeChild(tr.firstElementChild)
+        tr.removeChild(tr.lastElementChild)
+
+        // set null
+        Array.from(tr.children).forEach(c => {
+            c.innerHTML = c.innerHTML.trim()
+            if (c.innerHTML == "" || c.innerHTML == "?") {
+                c.innerHTML = "null"
+            }
+            // c.innerHTML = '"' + c.innerHTML.trim() + '"'
+        })
+
+        // add the code to use in the dataset
+        if (tr.firstElementChild.tagName == "TH") {   // detect header line
+            let th = document.createElement("th")
+            th.appendChild(document.createTextNode("ISO?"))
+            tr.appendChild(th)
+        }
+        else {
+            let td = document.createElement("td")
+            let noc = tr.getElementsByTagName("td")[1].innerHTML
+            td.appendChild(document.createTextNode("HIST_" + noc))
+            tr.appendChild(td)
+        }
+    })
+
+    Array.from(document.querySelectorAll("*")).forEach(e => {
+        while (e.attributes.length > 0) {
+            e.removeAttribute(e.attributes[0].name);
+        }
+    })
+</script>
+</body></html>

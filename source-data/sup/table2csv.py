@@ -2,7 +2,7 @@ import re
 
 buf=""
 
-with open("entity resolution solver CUT.html", "r") as filein:
+with open("country-codes.xml", "r") as filein:
     with open("a.csv", "w") as fileout:
         for line in filein:
             # start blastin

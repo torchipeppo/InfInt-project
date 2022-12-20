@@ -171,3 +171,65 @@
 <td>ZAI<hr><small><i>1997</i></small></td>
 <td>ZAR<hr><small><i>1997</i></small>
 </td></tr></tbody><tfoot></tfoot></table>
+
+<!-- PREPROCESSING CODE -->
+
+<script>
+    function dissolve(e) {
+        par = e.parentElement
+        par.innerHTML = e.innerHTML
+    }
+
+    // start blastin
+    Array.from(document.getElementsByTagName("caption")).forEach(e=>e.remove())
+    Array.from(document.getElementsByTagName("tfoot")).forEach(e=>e.remove())
+    Array.from(document.getElementsByTagName("img")).forEach(e=>e.remove())
+    Array.from(document.getElementsByTagName("link")).forEach(e=>e.remove())
+    Array.from(document.getElementsByTagName("hr")).forEach(e=>e.remove())
+    Array.from(document.getElementsByTagName("small")).forEach(e=>e.remove())
+    Array.from(document.querySelectorAll("span.flagicon")).forEach(e=>e.remove())
+    Array.from(document.querySelectorAll("td.table-yes")).forEach(e=>e.remove())
+    Array.from(document.querySelectorAll("td.table-no")).forEach(e=>e.remove())
+
+    Array.from(document.getElementsByTagName("a")).forEach(dissolve)
+    Array.from(document.querySelectorAll("span.monospaced")).forEach(dissolve)
+    Array.from(document.querySelectorAll("span[data-sort-value]")).forEach(dissolve)
+
+    Array.from(document.querySelectorAll("sup")).forEach(sup => {
+        sup.parentElement.innerHTML = "null"
+    })
+
+    Array.from(document.querySelectorAll("tr")).forEach(tr => {
+        // eliminate: flag, ISO
+        tr.removeChild(tr.firstElementChild)
+        tr.removeChild(tr.lastElementChild)
+
+        // set null
+        Array.from(tr.children).forEach(c => {
+            c.innerHTML = c.innerHTML.trim()
+            if (c.innerHTML == "" || c.innerHTML == "?") {
+                c.innerHTML = "null"
+            }
+            // c.innerHTML = '"' + c.innerHTML.trim() + '"'
+        })
+
+        // add the code to use in the dataset
+        if (tr.firstElementChild.tagName == "TH") {   // detect header line
+            let th = document.createElement("th")
+            th.appendChild(document.createTextNode("ISO?"))
+            tr.appendChild(th)
+        }
+        else {
+            let td = document.createElement("td")
+            let noc = tr.getElementsByTagName("td")[1].innerHTML
+            td.appendChild(document.createTextNode("HIST_" + noc))
+            tr.appendChild(td)
+        }
+    })
+
+    Array.from(document.querySelectorAll("*")).forEach(e => {
+        while (e.attributes.length > 0) {
+            e.removeAttribute(e.attributes[0].name);
+        }
+    })
+</script>

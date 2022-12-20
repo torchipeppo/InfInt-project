@@ -35,6 +35,8 @@
 
 *entity is country name, semi-irrelevant since we have Wiki table*
 
+*Fixed Kosovo code: OWID_KOS -> XKX to match the population dataset*
+
 
 # population.csv
 
@@ -49,7 +51,7 @@
 
 ### countrydata(isocode, caplat, caplon, continent)
 
-*Preprocessing: fixed a couple "Washington, D.C.", removed useless columns, replaced country codes with ISO Alpha-3 (was only occurrence of Alpha-2, decided to simplify)*
+*Preprocessing: fixed a couple "Washington, D.C.", removed useless columns, replaced country codes with ISO Alpha-3 (was only occurrence of Alpha-2, decided to simplify). Added Kosovo by hand.*
 
 
 # hosting-countries.csv
@@ -67,26 +69,6 @@
 
 *Will be main source for country names too*
 
-*Preprocessing: turned into CSV (was HTML)*
+*Preprocessing: fused two HTML into one CSV (tried fusing into one HTML and read it as XML, but exec time went from ~30 sec to ~5 min, so CSV was chosen for performance reasons). Set Kosovo ISO code to XKX (its temporary code, used in the population dataset)*
 
 *Historical countries may be useless. Economic data is only from 1960 anyway.*
-
-
-
-
-<!--
-# mathematical stuff
-
-I can define this, right? Do I do it here? Or in the mapping?
-
-### plus(a,b,s)
-Equivalent to the natural number domain expression, a + b == s
-
-### EquivalentNames(n1, n2)
-Set of all and only the string pairs that contain exactly the same words, regardless of order and capitalization.
-
-Examples:
-* ("PETRI Francesco", "Francesco Petri") &in; EquivalentNames 
-* ("Francesco Petri", "SANADA Akihiko") &notin; EquivalentNames
-
--->
