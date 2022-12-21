@@ -58,7 +58,7 @@
 
 ### hosted(year, hostcountry, hostcity)
 
-*done GIGA PREPROCESSING to only leave hosting country. And changed filename.*
+*done GIGA PREPROCESSING to only leave hosting country. And changed filename. And fixed country names to match Wiki table.*
 
 
 # country-codes.csv
