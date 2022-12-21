@@ -238,9 +238,9 @@ Yemen,Sanaa,15.35,44.200000,YE,Asia
 Zambia,Lusaka,-15.416666666666666,28.283333,ZM,Africa
 Zimbabwe,Harare,-17.816666666666666,31.033333,ZW,Africa
 US Minor Outlying Islands,"Washington, D.C.",38.883333,-77.000000,UM,Australia
-Antarctica,N/A,0,0.000000,AQ,Antarctica
+Antarctica,N/A,0,0,AQ,Antarctica
 Northern Cyprus,North Nicosia,35.183333,33.366667,NULL,Europe
-Hong Kong,N/A,0,0.000000,HK,Asia
-Heard Island and McDonald Islands,N/A,0,0.000000,HM,Antarctica
+Hong Kong,N/A,0,0,HK,Asia
+Heard Island and McDonald Islands,N/A,0,0,HM,Antarctica
 British Indian Ocean Territory,Diego Garcia,-7.3,72.400000,IO,Africa
-Macau,N/A,0,0.000000,MO,Asia
+Macau,N/A,0,0,MO,Asia
