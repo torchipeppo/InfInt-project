@@ -18,11 +18,11 @@
 
 # Summer_olympic_Medals.csv
 
-### country_medals(year, hostcountry, hostcity, countryname, countrycode, gold, silver, bronze)
+### country_medals(year, countryname, countrycode, gold, silver, bronze)
 
 *Already-counted data since FOL can't count*
 
-*(Sì, è la mamma di hosted, ma questa l'ho messa dopo, quindi per ora chissene)*
+*Disclaimer: here appear some teams/regions that don't correspond to countries with ISO codes or former countries. They won't be integrated at all. It would be useless anyway since they don't have socio-economic or geographic data.*
 
 
 # world-banks-income-groups.csv

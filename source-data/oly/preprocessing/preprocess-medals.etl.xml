@@ -1,0 +1,58 @@
+<!DOCTYPE etl SYSTEM "http://scriptella.org/dtd/etl.dtd">
+<etl>
+    <description>Eliminate some columns and add (most) country codes for Rio</description>
+
+    <!-- Connection declarations -->
+    <connection id="in" driver="csv" url="Summer_olympic_Medals-orig.csv">
+        <!-- Year,Host_country,Host_city,Country_Name,Country_Code,Gold,Silver,Bronze -->
+        null_string=
+    </connection>
+    <connection id="countrycodes" driver="csv" url="../../sup/country-codes.csv">
+        <!-- "Country","IOC","FIFA","ISO" -->
+        null_string=null
+    </connection>
+    <connection id="out" driver="csv" url="pippo.csv">
+        null_string=MANUAL_FIX_PLSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
+    </connection>
+    <connection id="js" driver="script">
+        language=rhino
+    </connection>
+
+    <script connection-id="out">
+        Year, Country_Name, Country_Code, Gold, Silver, Bronze
+    </script>
+
+    <query connection-id="in">
+        <!-- select * -->
+
+        <!-- Null values are outright not defined in JS scripts
+            and always yield an error, so I need to get creative -->
+        <query connection-id="js">
+            mutable = {cc: null}
+            query.next()
+
+            <!-- If country code is available in the original csv, use that -->
+            <script connection-id="js" if="Country_Code!=null">
+                mutable.cc = Country_Code
+            </script>
+
+            <!-- Otherwise, check if the country's name matches any in the countrycodes table -->
+            <query connection-id="countrycodes" if="mutable.cc==null">
+                ^${Country_Name}$,,,
+                <!-- IOC code for coherence with the rest,
+                    this is just preprocessing to have a code in the first place,
+                    will change to ISO in actual integration -->
+                <script connection-id="js" if="IOC!=null">
+                    mutable.cc = IOC
+                </script>
+            </query>
+            <!-- If not found, remains null. Whatever. Will fix manually, I expect few cases -->
+
+            <script connection-id="out">
+                $Year,$Country_Name,${mutable.cc},$Gold,$Silver,$Bronze
+            </script>
+        </query>
+
+
+    </query>
+</etl>

@@ -18,7 +18,7 @@
 
 &forall; year, isocode . (&exist; cname,city,ci,cf . hosted(year, cname, city) &and; countrycodes(cname, ci, cf, isocode) &xrarr; EditionIsInCountry(year, isocode))
 
-&forall; isocode, year, gold, silver, bronze . (&exist; hco, hci, cn, noc, cn2, cf . country_medals(year, hco, hci, cn, noc, gold, silver, bronze) &and; countrycodes(cn2, noc, cf, isocode) &xrarr; GotTotalMedals(isocode, year, gold, silver, bronze))
+&forall; isocode, year, gold, silver, bronze . (&exist; cn, noc, cn2, cf . country_medals(year, cn, noc, gold, silver, bronze) &and; countrycodes(cn2, noc, cf, isocode) &xrarr; GotTotalMedals(isocode, year, gold, silver, bronze))
 
 &forall; isocode, year, class . (&exist; cn . income_group(cn, isocode, year, class) &xrarr; HadIncomeClass(isocode, year, class))
 

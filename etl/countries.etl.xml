@@ -1,0 +1,130 @@
+<!DOCTYPE etl SYSTEM "http://scriptella.org/dtd/etl.dtd">
+<etl>
+    <description>Implement HasName predicate</description>
+
+    <!-- Connection declarations -->
+    <connection id="medals" driver="csv" url="../source-data/oly/Summer_olympic_Medals.csv">
+        <!-- Year,Country_Name,Country_Code,Gold,Silver,Bronze -->
+        null_string=
+    </connection>
+    <connection id="income" driver="csv" url="../source-data/sec/world-banks-income-groups.csv">
+        <!-- Entity,Code,Year,Class -->
+        null_string=Not categorized
+    </connection>
+    <connection id="population" driver="csv" url="../source-data/sec/population.csv">
+        <!-- "country","YR1960","YR1961","YR1962","YR1963","YR1964",
+            "YR1965","YR1966","YR1967","YR1968","YR1969",
+            "YR1970","YR1971","YR1972","YR1973","YR1974",
+            "YR1975","YR1976","YR1977","YR1978","YR1979",
+            "YR1980","YR1981","YR1982","YR1983","YR1984",
+            "YR1985","YR1986","YR1987","YR1988","YR1989",
+            "YR1990","YR1991","YR1992","YR1993","YR1994",
+            "YR1995","YR1996","YR1997","YR1998","YR1999",
+            "YR2000","YR2001","YR2002","YR2003","YR2004",
+            "YR2005","YR2006","YR2007","YR2008","YR2009",
+            "YR2010","YR2011","YR2012","YR2013","YR2014",
+            "YR2015","YR2016","YR2017","YR2018","YR2019",
+            "YR2020","YR2021"
+        -->
+        null_string=..
+    </connection>
+    <connection id="countrycodes" driver="csv" url="../source-data/sup/country-codes.csv">
+        <!-- "Country","IOC","FIFA","ISO" -->
+        null_string=null
+    </connection>
+    <connection id="out" url="jdbc:postgresql://localhost:5432/project_ace" user="admin" password="password">
+    </connection>
+    <!-- Required to ensure unique additions -->
+    <connection id="js" driver="script">
+        language=rhino
+        <!-- JS engine suggested by the author themself:
+            https://github.com/scriptella/scriptella-etl/issues/2
+        -->
+    </connection>
+
+    <!-- Reset tables -->
+    <script connection-id="out">
+        DROP TABLE IF EXISTS GotTotalMedals;
+        CREATE TABLE GotTotalMedals (
+            cc varchar,
+            year int,
+            gold int,
+            silver int,
+            bronze int
+        );
+
+        DROP TABLE IF EXISTS HadIncomeClass;
+        CREATE TABLE HadIncomeClass (
+            cc varchar,
+            year int,
+            class varchar
+        );
+
+        DROP TABLE IF EXISTS HadPopulation;
+        CREATE TABLE HadPopulation (
+            cc varchar,
+            year int,
+            population bigint
+        );
+    </script>
+
+    <!-- Go through the whole CSV and populate the tables -->
+    <query connection-id="medals">
+        <!-- Empty query selects everything -->
+
+        <query connection-id="countrycodes">
+            ,$Country_Code,,
+            <script connection-id="out">
+                INSERT INTO GotTotalMedals VALUES (
+                    ?ISO,
+                    CAST(?Year AS int),
+                    CAST(?Gold AS int),
+                    CAST(?Silver AS int),
+                    CAST(?Bronze AS int)
+                );
+            </script>
+        </query>
+    </query>
+
+    <query connection-id="income">
+        <!-- Empty query selects everything -->
+
+        <script connection-id="out">
+            INSERT INTO HadIncomeClass VALUES (
+                ?Code,
+                CAST(?Year AS int),
+                ?Class
+            );
+        </script>
+    </query>
+
+    <query connection-id="population">
+        <!-- Empty query selects everything -->
+
+        <query connection-id="js">
+            <!-- Extract data from the row year by year with this loop -->
+            <![CDATA[ 
+            for (year=1960; year<=2021; year++) {
+                // Transform from Java string to JavaScript string,
+                // or from object to string,
+                // or I dunno
+                population = String(query.getParameter("YR"+year))
+                // But now null value became "null" string.
+                // Handle that.
+                if (population == "null") {
+                    population = null
+                }
+                // Pass these variables to next script.
+                query.next()
+            }
+            ]]>
+            <script connection-id="out">
+                INSERT INTO HadPopulation VALUES (
+                    ?country,
+                    ?year,
+                    CAST(?population AS bigint)
+                );
+            </script>
+        </query>
+    </query>
+</etl>
