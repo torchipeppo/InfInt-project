@@ -34,7 +34,7 @@
     </connection>
     <connection id="out" url="jdbc:postgresql://localhost:5432/project_ace" user="admin" password="password">
     </connection>
-    <!-- Required to ensure unique additions -->
+    <!-- Very useful to go through population rows -->
     <connection id="js" driver="script">
         language=rhino
         <!-- JS engine suggested by the author themself:
