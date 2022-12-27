@@ -56,15 +56,32 @@
         <query connection-id="in">
             <!-- Empty query selects everything -->
 
-            <script connection-id="out">
-                INSERT INTO ParticipatedWithResults VALUES (
-                    ?ID,
-                    CAST(?Year AS int),
-                    ?Sport,
-                    ?Event,
-                    ?Medal
-                );
-            </script>
+            <!-- Don't want to represent "won no medal" as NULL.
+                It's not a missing value, rather we know that no medal was won. -->
+            <!-- Why enclose the variable inside an object?
+                Because it turns out that changes to a variable are only visible
+                in nested (child) elements, not siblings.
+                And I can't nest the SQL script into a JS that's esecuted only conditionally.
+                Acting on a mutable object, however, does produce side effect.
+                It's not unlike a function's scope. -->
+            <query connection-id="js">
+                mutable = {the_medal: "None"}
+                query.next()
+
+                <script connection-id="js" if="Medal!=null">
+                    mutable.the_medal = Medal
+                </script>
+
+                <script connection-id="out">
+                    INSERT INTO ParticipatedWithResults VALUES (
+                        ?ID,
+                        CAST(?Year AS int),
+                        ?Sport,
+                        ?Event,
+                        ?{mutable.the_medal}
+                    );
+                </script>
+            </query>
 
             <query connection-id="countrycodes">
                 ,$NOC,,
