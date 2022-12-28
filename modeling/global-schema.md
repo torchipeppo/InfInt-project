@@ -57,3 +57,7 @@ cc is Country Code. It's always ISO (hopefully).
 *(what, continent)*
 
 *As above*
+
+# TODO
+
+* Add FollowedBy to both schemas if we use it

@@ -1,0 +1,54 @@
+<!DOCTYPE etl SYSTEM "http://scriptella.org/dtd/etl.dtd">
+<etl>
+    <description>Fill unary predicates tables</description>
+
+    <!-- Connection declarations -->
+    <connection id="out" url="jdbc:postgresql://localhost:5432/project_ace" user="admin" password="password">
+    </connection>
+    <!-- Required to ensure unique additions -->
+    <connection id="js" driver="script">
+        language=rhino
+        <!-- JS engine suggested by the author themself:
+            https://github.com/scriptella/scriptella-etl/issues/2
+        -->
+    </connection>
+
+    <!-- Reset tables -->
+    <script connection-id="out">
+        DROP TABLE IF EXISTS FollowedBy;
+        CREATE TABLE FollowedBy (
+            prev int,
+            next int
+        );
+
+        INSERT INTO FollowedBy VALUES (1896, 1900);
+        INSERT INTO FollowedBy VALUES (1900, 1904);
+        INSERT INTO FollowedBy VALUES (1904, 1908);
+        INSERT INTO FollowedBy VALUES (1908, 1912);
+        INSERT INTO FollowedBy VALUES (1912, 1920);
+        INSERT INTO FollowedBy VALUES (1920, 1924);
+        INSERT INTO FollowedBy VALUES (1924, 1928);
+        INSERT INTO FollowedBy VALUES (1928, 1932);
+        INSERT INTO FollowedBy VALUES (1932, 1936);
+        INSERT INTO FollowedBy VALUES (1936, 1948);
+        INSERT INTO FollowedBy VALUES (1948, 1952);
+        INSERT INTO FollowedBy VALUES (1952, 1956);
+        INSERT INTO FollowedBy VALUES (1956, 1956);
+        INSERT INTO FollowedBy VALUES (1956, 1960);
+        INSERT INTO FollowedBy VALUES (1960, 1964);
+        INSERT INTO FollowedBy VALUES (1964, 1968);
+        INSERT INTO FollowedBy VALUES (1968, 1972);
+        INSERT INTO FollowedBy VALUES (1972, 1976);
+        INSERT INTO FollowedBy VALUES (1976, 1980);
+        INSERT INTO FollowedBy VALUES (1980, 1984);
+        INSERT INTO FollowedBy VALUES (1984, 1988);
+        INSERT INTO FollowedBy VALUES (1988, 1992);
+        INSERT INTO FollowedBy VALUES (1992, 1996);
+        INSERT INTO FollowedBy VALUES (1996, 2000);
+        INSERT INTO FollowedBy VALUES (2000, 2004);
+        INSERT INTO FollowedBy VALUES (2004, 2008);
+        INSERT INTO FollowedBy VALUES (2008, 2012);
+        INSERT INTO FollowedBy VALUES (2012, 2016);
+        INSERT INTO FollowedBy VALUES (2016, 2020);
+    </script>
+</etl>
