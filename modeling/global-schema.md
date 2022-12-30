@@ -27,20 +27,11 @@ cc is Country Code. It's always ISO (hopefully).
 ## ParticipatedWithResults/5
 *(id, year, sport, event, medal)*
 
-## AthleteIsInCountry/2
-*(id, cc)*
-
-TODO remove, perché sostituito da...
-
-## AthleteWasInCountry/3
+## AthleteWasFromCountry/3
 *(id, year, cc)*
-
-TODO fore è meglio chiamarlo AthleteWasFromCountry...
 
 ## EditionIsInCountry/2
 *(year, cc)*
-
-*(Different data types, not worth it to try and make one table. I prefer having year as int for numerical operations/comparisons.)*
 
 ## GotTotalMedals/5
 *(cc, year, gold, silver, bronze)*

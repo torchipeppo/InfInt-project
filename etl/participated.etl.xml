@@ -35,14 +35,8 @@
             medal varchar
         );
 
-        DROP TABLE IF EXISTS AthleteIsInCountry;
-        CREATE TABLE AthleteIsInCountry (
-            id varchar,
-            cc varchar
-        );
-
-        DROP TABLE IF EXISTS AthleteWasInCountry;
-        CREATE TABLE AthleteWasInCountry (
+        DROP TABLE IF EXISTS AthleteWasFromCountry;
+        CREATE TABLE AthleteWasFromCountry (
             id varchar,
             year int,
             cc varchar
@@ -56,7 +50,6 @@
     </script>
 
     <query connection-id="js">
-        athlete_country_pairs = new Set()
         athlete_year_country_triples = new Set()
         query.next()
 
@@ -94,21 +87,12 @@
             <query connection-id="countrycodes">
                 ,$NOC,,
                 <query connection-id="js">
-                    if (!athlete_country_pairs.has(ID + "," + ISO)) {
-                        athlete_country_pairs.add(ID + "," + ISO)
-                        query.next()
-                    }
-                    <script connection-id="out">
-                        INSERT INTO AthleteIsInCountry VALUES (?ID, ?ISO);
-                    </script>
-                </query>
-                <query connection-id="js">
                     if (!athlete_year_country_triples.has(ID + "," + Year + "," + ISO)) {
                         athlete_year_country_triples.add(ID + "," + Year + "," + ISO)
                         query.next()
                     }
                     <script connection-id="out">
-                        INSERT INTO AthleteWasInCountry VALUES (?ID, CAST(?Year AS int), ?ISO);
+                        INSERT INTO AthleteWasFromCountry VALUES (?ID, CAST(?Year AS int), ?ISO);
                     </script>
                 </query>
             </query>

@@ -14,7 +14,7 @@
 
 &forall; id, year, sport, event, medal . (&exist; n,s,a,h,w,t,noc,se,c . athlete_event(id, n, s, a, h, w, t, noc, year, se, c, sport, event, medal) &xrarr; ParticipatedWithResults(id, year, sport, event, medal))
 
-&forall; id, isocode . (&exist; n,s,a,h,w,t,noc,y,se,c,sp,e,m,cn,cf . athlete_event(id, n, s, a, h, w, t, noc, y, se, c, sp, e, m) &and; countrycodes(cn, noc, cf, isocode) &xrarr; AthleteIsInCountry(id, isocode))
+&forall; id, year, isocode . (&exist; n,s,a,h,w,t,noc,se,c,sp,e,m,cn,cf . athlete_event(id, n, s, a, h, w, t, noc, year, se, c, sp, e, m) &and; countrycodes(cn, noc, cf, isocode) &xrarr; AthleteWasFromCountry(id, year isocode))
 
 &forall; year, isocode . (&exist; cname,city,ci,cf . hosted(year, cname, city) &and; countrycodes(cname, ci, cf, isocode) &xrarr; EditionIsInCountry(year, isocode))
 

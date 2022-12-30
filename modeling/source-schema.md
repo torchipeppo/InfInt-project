@@ -11,13 +11,6 @@
 *N.B.: Dataset is bugged!! Non-ascii characters are mysteriously absent from names. For example, see poor no. 108383, whose actual surname is Šekarić. It came like this. Nothing to be done about it.*
 
 
-# noc_regions.csv
-
-*TODO marked for deletion, the Wikipedia table should be better*
-
-*But check if there are some nations that appear only there first*
-
-
 # Summer_olympic_Medals.csv
 
 ### country_medals(year, countryname, countrycode, gold, silver, bronze)
