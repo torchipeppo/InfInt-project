@@ -26,7 +26,7 @@
 
     <!-- Reset tables -->
     <script connection-id="out">
-        DROP TABLE IF EXISTS ParticipatedWithResults;
+        DROP TABLE IF EXISTS ParticipatedWithResults CASCADE;
         CREATE TABLE ParticipatedWithResults (
             id varchar,
             year int,
@@ -41,6 +41,13 @@
             cc varchar
         );
 
+        DROP TABLE IF EXISTS AthleteWasInCountry;
+        CREATE TABLE AthleteWasInCountry (
+            id varchar,
+            year int,
+            cc varchar
+        );
+
         DROP TABLE IF EXISTS EditionIsInCountry;
         CREATE TABLE EditionIsInCountry (
             year int,
@@ -50,6 +57,7 @@
 
     <query connection-id="js">
         athlete_country_pairs = new Set()
+        athlete_year_country_triples = new Set()
         query.next()
 
         <!-- Go through the whole CSV and populate the tables -->
@@ -92,6 +100,15 @@
                     }
                     <script connection-id="out">
                         INSERT INTO AthleteIsInCountry VALUES (?ID, ?ISO);
+                    </script>
+                </query>
+                <query connection-id="js">
+                    if (!athlete_year_country_triples.has(ID + "," + Year + "," + ISO)) {
+                        athlete_year_country_triples.add(ID + "," + Year + "," + ISO)
+                        query.next()
+                    }
+                    <script connection-id="out">
+                        INSERT INTO AthleteWasInCountry VALUES (?ID, CAST(?Year AS int), ?ISO);
                     </script>
                 </query>
             </query>

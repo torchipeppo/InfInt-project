@@ -30,6 +30,13 @@ cc is Country Code. It's always ISO (hopefully).
 ## AthleteIsInCountry/2
 *(id, cc)*
 
+TODO remove, perché sostituito da...
+
+## AthleteWasInCountry/3
+*(id, year, cc)*
+
+TODO fore è meglio chiamarlo AthleteWasFromCountry...
+
 ## EditionIsInCountry/2
 *(year, cc)*
 
