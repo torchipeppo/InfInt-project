@@ -30,11 +30,7 @@
 
 &forall; isocode, caplat . (&exist; caplon, continent . countrydata(isocode, caplat, caplon, continent) &xrarr; HasCapitalLatitude(isocode, caplat))
 
-&forall; id, caplat . (&exist; n,s,a,h,w,t,noc,y,se,c,sp,e,m,cn,cf,caplon,continent . athlete_event(id, n, s, a, h, w, t, noc, y, se, c, sp, e, m) &and; countrycodes(cn, noc, cf, isocode) &and; countrydata(isocode, caplat, caplon, continent) &xrarr; HasCapitalLatitude(id, caplat))
-
 &forall; isocode, continent . (&exist; caplat, caplon . countrydata(isocode, caplat, caplon, continent) &xrarr; IsInContinent(isocode, continent))
-
-&forall; id, continent . (&exist; n,s,a,h,w,t,noc,y,se,c,sp,e,m,cn,cf,caplat,caplon . athlete_event(id, n, s, a, h, w, t, noc, y, se, c, sp, e, m) &and; countrycodes(cn, noc, cf, isocode) &and; countrydata(isocode, caplat, caplon, continent) &xrarr; IsInContinent(id, continent))
 
 # Soffitta
 

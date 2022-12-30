@@ -76,13 +76,13 @@ SELECT DISTINCT hicl.cc, hicl.class
 FROM
     IsInContinent as home_iic
         -- first
-        JOIN Temp AS pic1 ON pic1.home_cc = home_iic.what
+        JOIN Temp AS pic1 ON pic1.home_cc = home_iic.cc
         -- second
-        JOIN Temp AS pic2 ON pic2.home_cc = home_iic.what
+        JOIN Temp AS pic2 ON pic2.home_cc = home_iic.cc
         -- third
-        JOIN Temp AS pic3 ON pic3.home_cc = home_iic.what
+        JOIN Temp AS pic3 ON pic3.home_cc = home_iic.cc
         -- class
-        JOIN HadIncomeClass AS hicl ON hicl.cc = home_iic.what AND hicl.year = pic1.year
+        JOIN HadIncomeClass AS hicl ON hicl.cc = home_iic.cc AND hicl.year = pic1.year
 WHERE
     pic1.continent != home_iic.continent AND
     pic2.continent != home_iic.continent AND

@@ -1,4 +1,4 @@
-cc is Country Code. It's always ISO (hopefully).
+cc is Country Code. It's always ISO.
 
 *(medals, events and continents are not first-class citizens, so they don't have any /1 predicates)*
 
@@ -47,18 +47,16 @@ cc is Country Code. It's always ISO (hopefully).
 *(cc, year, population)*
 
 ## HasCapitalLatitude/2
-*(what, lat)*
-
-*For countries primarily, also for athletes*
+*(cc, lat)*
 
 ## IsInContinent/2
-*(what, continent)*
-
-*As above*
+*(cc, continent)*
 
 # TODO
 
 * Add FollowedBy to both schemas if we use it
+
+* Eliminate HasCapitalLatitude if it goes unused for the rest of the project
 
 # Soffitta
 

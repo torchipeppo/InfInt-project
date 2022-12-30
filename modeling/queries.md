@@ -55,12 +55,12 @@ FROM
         JOIN ParticipatedWithResults AS p2  ON p1.id = p2.id AND p1.sport = p2.sport
         JOIN HasName AS hn                  ON p1.id = hn.what
         JOIN EditionIsInCountry AS eic1     ON p1.year = eic1.year
-        JOIN IsInContinent AS cic1          ON eic1.cc = cic1.what
+        JOIN IsInContinent AS cic1          ON eic1.cc = cic1.cc
         JOIN EditionIsInCountry AS eic2     ON p2.year = eic2.year
-        JOIN IsInContinent AS cic2          ON eic2.cc = cic2.what
+        JOIN IsInContinent AS cic2          ON eic2.cc = cic2.cc
         JOIN AthleteWasFromCountry AS aic1    ON p1.id = aic1.id AND p1.year = aic1.year
         JOIN AthleteWasFromCountry AS aic2    ON p2.id = aic2.id AND p2.year = aic2.year
-        JOIN IsInContinent as home_ic       ON aic1.cc = home_ic.what
+        JOIN IsInContinent as home_ic       ON aic1.cc = home_ic.cc
 WHERE
     aic1.cc = aic2.cc AND
     p1.medal != 'None' AND
