@@ -1,6 +1,6 @@
 <!DOCTYPE etl SYSTEM "http://scriptella.org/dtd/etl.dtd">
 <etl>
-    <description>Implement HasName predicate</description>
+    <description>Implement predicates on athlete info</description>
 
     <!-- Connection declarations -->
     <connection id="in" driver="csv" url="../source-data/oly/athlete_events-upto2016.csv">
@@ -10,9 +10,6 @@
     <connection id="countrycodes" driver="csv" url="../source-data/sup/country-codes.csv">
         <!-- "Country","IOC","FIFA","ISO" -->
         null_string=null
-    </connection>
-    <connection id="hosted" driver="csv" url="../source-data/sup/hosting-countries.csv">
-        <!-- Year,Host_country,Host_city -->
     </connection>
     <connection id="out" url="jdbc:postgresql://localhost:5432/project_ace" user="admin" password="password">
     </connection>
@@ -26,7 +23,7 @@
 
     <!-- Reset tables -->
     <script connection-id="out">
-        DROP TABLE IF EXISTS HasName;
+        DROP TABLE IF EXISTS HasName CASCADE;
         CREATE TABLE HasName (
             what varchar,
             name varchar
@@ -44,12 +41,29 @@
             year int,
             age int
         );
+
+        DROP TABLE IF EXISTS ParticipatedWithResults CASCADE;
+        CREATE TABLE ParticipatedWithResults (
+            id varchar,
+            year int,
+            sport varchar,
+            event varchar,
+            medal varchar
+        );
+
+        DROP TABLE IF EXISTS AthleteWasFromCountry;
+        CREATE TABLE AthleteWasFromCountry (
+            id varchar,
+            year int,
+            cc varchar
+        );
     </script>
 
     <query connection-id="js">
         processed_athletes_for_name_and_sex = new Set()
         athlete_year_pairs = new Set()
         country_name_pairs = new Set()
+        athlete_year_country_triples = new Set()
         query.next()
 
         <!-- Go through the whole CSV and populate the tables -->
@@ -82,9 +96,37 @@
                 </script>
             </query>
 
+            <!-- Don't want to represent "won no medal" as NULL.
+                It's not a missing value, rather we know that no medal was won. -->
+            <!-- Why enclose the variable inside an object?
+                Because it turns out that changes to a variable are only visible
+                in nested (child) elements, not siblings.
+                And I can't nest the SQL script into a JS that's esecuted only conditionally.
+                Acting on a mutable object, however, does produce side effect.
+                It's not unlike a function's scope. -->
+            <query connection-id="js">
+                mutable = {the_medal: "None"}
+                query.next()
+
+                <script connection-id="js" if="Medal!=null">
+                    mutable.the_medal = Medal
+                </script>
+
+                <script connection-id="out">
+                    INSERT INTO ParticipatedWithResults VALUES (
+                        ?ID,
+                        CAST(?Year AS int),
+                        ?Sport,
+                        ?Event,
+                        ?{mutable.the_medal}
+                    );
+                </script>
+            </query>
+
             <!-- Convert IOC code to ISO code, again add uniquely -->
             <query connection-id="countrycodes">
                 ,$NOC,,
+
                 <query connection-id="js">
                     if (!country_name_pairs.has(ISO + "," + Country)) {
                         country_name_pairs.add(ISO + "," + Country)
@@ -92,6 +134,16 @@
                     }
                     <script connection-id="out">
                         INSERT INTO HasName VALUES (?ISO, ?Country);
+                    </script>
+                </query>
+
+                <query connection-id="js">
+                    if (!athlete_year_country_triples.has(ID + "," + Year + "," + ISO)) {
+                        athlete_year_country_triples.add(ID + "," + Year + "," + ISO)
+                        query.next()
+                    }
+                    <script connection-id="out">
+                        INSERT INTO AthleteWasFromCountry VALUES (?ID, CAST(?Year AS int), ?ISO);
                     </script>
                 </query>
             </query>

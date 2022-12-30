@@ -7,7 +7,21 @@
         <!-- "isocode","caplat","caplon","continent" -->
         null_string=0
     </connection>
+    <connection id="hosted" driver="csv" url="../source-data/geo/hosting-countries.csv">
+        <!-- Year,Host_country,Host_city -->
+    </connection>
+    <connection id="countrycodes" driver="csv" url="../source-data/sup/country-codes.csv">
+        <!-- "Country","IOC","FIFA","ISO" -->
+        null_string=null
+    </connection>
     <connection id="out" url="jdbc:postgresql://localhost:5432/project_ace" user="admin" password="password">
+    </connection>
+    <!-- Required to escape one regex injection -->
+    <connection id="js" driver="script">
+        language=rhino
+        <!-- JS engine suggested by the author themself:
+            https://github.com/scriptella/scriptella-etl/issues/2
+        -->
     </connection>
 
     <!-- Reset tables -->
@@ -22,6 +36,12 @@
         CREATE TABLE IsInContinent (
             cc varchar,
             continent varchar
+        );
+
+        DROP TABLE IF EXISTS EditionIsInCountry;
+        CREATE TABLE EditionIsInCountry (
+            year int,
+            cc varchar
         );
     </script>
 
@@ -39,6 +59,27 @@
                 ?continent
             );
         </script>
+    </query>
+
+    <query connection-id="hosted">
+        <!-- Empty query selects everything -->
+
+        <!-- Escape parentheses because one edition happened in
+        a nation whose full name in the countrycodes contains some:
+        "Korea, Republic of (South)" -->
+        <query connection-id="js">
+            Host_country = Host_country.replace("(", "\\(").replace(")", "\\)")
+            query.next()
+            <query connection-id="countrycodes">
+                ^${Host_country}$,,,
+                <script connection-id="out">
+                    INSERT INTO EditionIsInCountry VALUES (
+                        CAST(?Year AS int),
+                        ?ISO
+                    );
+                </script>
+            </query>
+        </query>
     </query>
 
     

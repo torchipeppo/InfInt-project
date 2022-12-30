@@ -7,8 +7,7 @@
 
     <script connection-id="scriptella">
         unaries.etl.xml
-        bio.etl.xml
-        participated.etl.xml
+        athletes.etl.xml
         countries.etl.xml
         geo.etl.xml
     </script>
