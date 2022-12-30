@@ -35,3 +35,7 @@
 &forall; isocode, continent . (&exist; caplat, caplon . countrydata(isocode, caplat, caplon, continent) &xrarr; IsInContinent(isocode, continent))
 
 &forall; id, continent . (&exist; n,s,a,h,w,t,noc,y,se,c,sp,e,m,cn,cf,caplat,caplon . athlete_event(id, n, s, a, h, w, t, noc, y, se, c, sp, e, m) &and; countrycodes(cn, noc, cf, isocode) &and; countrydata(isocode, caplat, caplon, continent) &xrarr; IsInContinent(id, continent))
+
+# Soffitta
+
+&forall; id, year, continent . (&exist; n,s,a,h,w,t,noc,se,c,sp,ev,m,cname,city,ci,cf,isocode,caplat,caplon . athlete_event(id, n, s, a, h, w, t, noc, year, se, c, sp, ev, m) &and; hosted(year, cname, city) &and; countrycodes(cname, ci, cf, isocode) &and; countrydata(isocode, caplat, caplon, continent) &xrarr; PlayedInContinent(id, year, continent))

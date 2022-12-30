@@ -8,6 +8,8 @@
 
 *Preprocessed to eliminate all winter games*
 
+*N.B.: Dataset is bugged!! Non-ascii characters are mysteriously absent from names. For example, see poor no. 108383, whose actual surname is Šekarić. It came like this. Nothing to be done about it.*
+
 
 # noc_regions.csv
 
