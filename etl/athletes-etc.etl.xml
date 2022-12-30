@@ -23,6 +23,22 @@
 
     <!-- Reset tables -->
     <script connection-id="out">
+        DROP TABLE IF EXISTS Athlete;
+        CREATE TABLE Athlete (
+            id varchar
+        );
+
+        DROP TABLE IF EXISTS Country;
+        CREATE TABLE Country (
+            cc varchar
+        );
+
+        DROP TABLE IF EXISTS Edition;
+        CREATE TABLE Edition (
+            year int
+        );
+
+
         DROP TABLE IF EXISTS HasName CASCADE;
         CREATE TABLE HasName (
             what varchar,
@@ -60,7 +76,10 @@
     </script>
 
     <query connection-id="js">
-        processed_athletes_for_name_and_sex = new Set()
+        athlete_ids = new Set()
+        country_codes = new Set()
+        edition_years = new Set()
+
         athlete_year_pairs = new Set()
         country_name_pairs = new Set()
         athlete_year_country_triples = new Set()
@@ -72,11 +91,12 @@
 
             <!-- Only add IDs that haven't been added yet -->
             <query connection-id="js">
-                if (!processed_athletes_for_name_and_sex.has(ID)) {
-                    processed_athletes_for_name_and_sex.add(ID)
+                if (!athlete_ids.has(ID)) {
+                    athlete_ids.add(ID)
                     query.next()
                 }
                 <script connection-id="out">
+                    INSERT INTO Athlete VALUES (?ID);
                     INSERT INTO HasName VALUES (?ID, ?Name);
                     INSERT INTO HasSex VALUES (?ID, ?Sex);
                 </script>
@@ -123,9 +143,30 @@
                 </script>
             </query>
 
+            <!-- Only add editions that haven't been added yet -->
+            <query connection-id="js">
+                if (!edition_years.has(Year)) {
+                    edition_years.add(Year)
+                    query.next()
+                }
+                <script connection-id="out">
+                    INSERT INTO Edition VALUES (CAST(?Year AS int));
+                </script>
+            </query>
+
             <!-- Convert IOC code to ISO code, again add uniquely -->
             <query connection-id="countrycodes">
                 ,$NOC,,
+
+                <query connection-id="js">   <!-- Had if="ISO != null" for Kosovo, b/c it had a IOC code but not an ISO code. But now I gave it one. -->
+                    if (!country_codes.has(ISO)) {
+                        country_codes.add(ISO)
+                        query.next()
+                    }
+                    <script connection-id="out">
+                        INSERT INTO Country VALUES (?ISO);
+                    </script>
+                </query>
 
                 <query connection-id="js">
                     if (!country_name_pairs.has(ISO + "," + Country)) {

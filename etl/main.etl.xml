@@ -6,8 +6,7 @@
     </connection>
 
     <script connection-id="scriptella">
-        unaries.etl.xml
-        athletes.etl.xml
+        athletes-etc.etl.xml
         countries.etl.xml
         geo.etl.xml
     </script>
