@@ -52,9 +52,10 @@ cc is Country Code. It's always ISO.
 ## IsInContinent/2
 *(cc, continent)*
 
-# TODO
+## FollowedBy/2
+*(prev, next)*
 
-* Add FollowedBy to both schemas if we use it
+# TODO
 
 * Eliminate HasCapitalLatitude if it goes unused for the rest of the project
 

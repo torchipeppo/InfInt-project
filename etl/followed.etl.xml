@@ -1,0 +1,31 @@
+<!DOCTYPE etl SYSTEM "http://scriptella.org/dtd/etl.dtd">
+<etl>
+    <description>Fill FollowedBy table</description>
+
+    <!-- Connection declarations -->
+    <connection id="in" driver="csv" url="../source-data/oly/followedby.csv">
+        <!-- Prev,Next -->
+    </connection>
+    <connection id="out" url="jdbc:postgresql://localhost:5432/project_ace" user="admin" password="password">
+    </connection>
+
+    <!-- Reset tables -->
+    <script connection-id="out">
+        DROP TABLE IF EXISTS FollowedBy;
+        CREATE TABLE FollowedBy (
+            prev int,
+            next int
+        );
+    </script>
+
+    <query connection-id="in">
+        <!-- Empty query selects all -->
+
+        <script connection-id="out">
+            INSERT INTO FollowedBy VALUES (
+                CAST(?Prev AS int),
+                CAST(?Next AS int)
+            );
+        </script>
+    </query>
+</etl>

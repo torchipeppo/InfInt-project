@@ -12,7 +12,12 @@
         null_string=null
     </connection>
     <connection id="out" url="jdbc:postgresql://localhost:5432/project_ace" user="admin" password="password">
-        statement.batchSize = 100
+        <!-- statement.batchSize = 100 -->
+        <!-- While halving execution time would be nice,
+            this doesn't work nice with the non-parametrized
+            instruction in the beginning.
+            Attempted double connection, got stuck.
+        -->
     </connection>
     <!-- Required to ensure unique additions -->
     <connection id="js" driver="script">

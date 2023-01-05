@@ -9,5 +9,6 @@
         athletes-etc.etl.xml
         countries.etl.xml
         geo.etl.xml
+        followed.etl.xml
     </script>
 </etl>

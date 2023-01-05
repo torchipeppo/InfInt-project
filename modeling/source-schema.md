@@ -65,3 +65,10 @@
 *Will be main source for country names too*
 
 *Preprocessing: fused two HTML into one CSV (tried fusing into one HTML and read it as XML, but exec time went from ~30 sec to ~5 min, so CSV was chosen for performance reasons). Set Kosovo ISO code to XKX (its temporary code, used in the population dataset)*
+
+
+# followedby.csv
+
+### followedby(prev, next)
+
+*(Added myself)*
