@@ -1,6 +1,6 @@
 <!DOCTYPE etl SYSTEM "http://scriptella.org/dtd/etl.dtd">
 <etl>
-    <description>Implement HasName predicate</description>
+    <description>Implement predicates on country data</description>
 
     <!-- Connection declarations -->
     <connection id="medals" driver="csv" url="../source-data/oly/Summer_olympic_Medals.csv">

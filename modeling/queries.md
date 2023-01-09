@@ -43,13 +43,10 @@ WHERE
 
 ### Atleti che vincono una medaglia nello stesso sport in due continenti diversi. I due continenti devono essere diversi dal proprio, e l'atleta deve aver giocato per la stessa nazione entrambe le volte.
 
-FOL: &exist; year1, year2, sport, e1, e2, medal1, medal2, cc1, cc2, cont1, cont2, home_cont, home_cc . ParticipatedWithResults(id, year1, sport, e1, medal1) &and; ParticipatedWithResults(id, year2, sport, e2, medal2) &and; &not; (medal1 = "None)" &and; &not; (medal2 = "None") &and; EditionIsInCountry(year1, cc1) &and; EditionIsInCountry(year2, cc2) &and; IsInContinent(cc1, cont1) &and; IsInContinent(cc2, cont2) &and; &not; (cont1 = cont2) &and; AthleteWasFromCountry(id, year1, home_cc) &and; AthleteWasFromCountry(id, year2, home_cc) &and; IsInContinent(home_cc, home_cont) &and; &not; (cont1 = home_cont) &and; &not; (cont2 = home_cont)
+FOL: &exist; year1, year2, sport, e1, e2, medal1, medal2, cc1, cc2, cont1, cont2, home_cont, home_cc . ParticipatedWithResults(id, year1, sport, e1, medal1) &and; ParticipatedWithResults(id, year2, sport, e2, medal2) &and; &not; (medal1 = "None") &and; &not; (medal2 = "None") &and; EditionIsInCountry(year1, cc1) &and; EditionIsInCountry(year2, cc2) &and; IsInContinent(cc1, cont1) &and; IsInContinent(cc2, cont2) &and; &not; (cont1 = cont2) &and; AthleteWasFromCountry(id, year1, home_cc) &and; AthleteWasFromCountry(id, year2, home_cc) &and; IsInContinent(home_cc, home_cont) &and; &not; (cont1 = home_cont) &and; &not; (cont2 = home_cont)
 
 ``` SQL
-DROP VIEW IF EXISTS QueryResult1;
-
-CREATE TEMP VIEW QueryResult1 AS  -- We'll need this again very soon
-SELECT DISTINCT p1.id, aic1.cc, hn.name, p1.year as anyyear, cic1.continent AS woncont1, cic2.continent AS woncont2
+SELECT DISTINCT hn.name, aic1.cc, cic1.continent AS continent1, cic2.continent AS continent2
 FROM
     ParticipatedWithResults AS p1
         JOIN ParticipatedWithResults AS p2    ON p1.id = p2.id AND p1.sport = p2.sport
@@ -67,24 +64,9 @@ WHERE
     p2.medal != 'None' AND
     cic1.continent != cic2.continent AND
     cic1.continent != home_ic.continent AND
-    cic2.continent != home_ic.continent;
-
-SELECT DISTINCT qr.name, qr.cc, qr.woncont1, qr.woncont2
-FROM QueryResult1 AS qr
--- the following conditions are just to standardize the order of the continents
-WHERE qr.woncont1 < qr.woncont2;
-```
-
-### FOLLOW-UP!! Get ogni nazione che ha un atleta come risultato della query precedente, insieme alla sua fascia di GNI
-
-FOL: &exist; ... &and; HadIncomeClass(home_cc, year1, class)
-
-``` SQL
--- Eseguire prima la query precedente per definire la view!
-
-SELECT DISTINCT qr.cc, hicl.class
-FROM QueryResult1 AS qr JOIN HadIncomeClass as hicl ON qr.cc = hicl.cc AND qr.anyyear = hicl.year
-ORDER BY hicl.class;
+    cic2.continent != home_ic.continent AND
+    -- the following condition is just to standardize the order of the continents
+    cic1.continent < cic2.continent;
 ```
 
 ### data un'edizione, esaminare la distribuzione delle (fasce di) PIL presenti nelle nazioni con più di X medaglie vinte in quell'edizione (forse affiancarla con tale distrubizione senza il vincolo in classifica)

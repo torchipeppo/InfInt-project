@@ -46,18 +46,11 @@ cc is Country Code. It's always ISO.
 ## HadPopulation/3
 *(cc, year, population)*
 
-## HasCapitalLatitude/2
-*(cc, lat)*
-
 ## IsInContinent/2
 *(cc, continent)*
 
 ## FollowedBy/2
 *(prev, next)*
-
-# TODO
-
-* Eliminate HasCapitalLatitude if it goes unused for the rest of the project
 
 # Soffitta
 
@@ -65,3 +58,8 @@ cc is Country Code. It's always ISO.
 *(id, year, continent)*
 
 *Added because I want the system to compute the big final query "countries with X athletes that played in a continent other than the country's". This predicate is here solely for the purpose of making that query actually computable without sucking up all my disk space as cache. It should be legit, designing the system based on the task I want it to perform.*
+
+## HasCapitalLatitude/2
+*(cc, lat)*
+
+*Never found a good use for this.*
