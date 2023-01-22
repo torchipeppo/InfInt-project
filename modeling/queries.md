@@ -16,30 +16,21 @@ WHERE
     AND aic1.year < aic2.year AND aic2.year < aic3.year;
 ```
 
-### Atleti tali che, giocando al di fuori della propria nazione, si sono piazzati sul podio meglio di un atleta che giocava in casa, anch'esso sul podio nello stesso evento.
+### Trovare le coppie di edizioni consecutive che si sono svolte nello stesso continente
 
-(&exist; id_home_guy, year, sport, event, medal_p, medal_h, other_cc, home_cc . ParticipatedWithResults(id_protagonist_guy, year, sport, event, medal_p) &and; ParticipatedWithResults(id_home_guy, year, sport, event, medal_h) &and; EditionIsInCountry(year, home_cc) &and; AthleteWasFromCountry(id_home_guy, year, home_cc) &and; AthleteWasFromCountry(id_protagonist_guy, year, other_cc) &and; &not; (other_cc = home_cc) &and; medal_p = "Gold" &and; medal_h = "Silver") &or; (&exist; ... &and; medal_p = "Gold" &and; medal_h = "Bronze") &or; (&exist; ... &and; medal_p = "Silver" &and; medal_h = "Bronze") *(Unione di query congiuntive)* *(N.B.: Richiediamo anche al padrone di casa di aver vinto una medaglia per limitarci a rivali comunque "competenti", credo che avere un atleta in casa fuori dal podio sia praticamente scontato per tutto. Quindi, evitiamo un numero eccessivo di risultati.)*
+*(Non è una query sugli atleti, stavolta è più sulle edizioni e sulla geografia. La vorrei perché sugli atleti ne ho già parecchie. Può fare da quinta query, oppure sostituirsi a una sugli atleti.)*
+
+&exist; continent . FollowedBy(year1, year2) &and; EditionIsInCountry(year1, cc1) &and; IsInContinent(cc1, continent) &and; EditionIsInCountry(year2, cc2) &and; IsInContinent(cc2, continent)
 
 ``` SQL
-SELECT DISTINCT protag.id, hn.name
-FROM
-    ParticipatedWithResults AS protag
-        JOIN ParticipatedWithResults AS home    ON protag.year = home.year AND protag.sport = home.sport AND protag.event = home.event
-        JOIN HasName AS hn                      ON protag.id = hn.what
-        JOIN EditionIsInCountry AS eic          ON home.year = eic.year
-        JOIN AthleteWasFromCountry AS aic_p     ON protag.id = aic_p.id AND protag.year = aic_p.year
-        JOIN AthleteWasFromCountry AS aic_h     ON home.id = aic_h.id AND home.year = aic_h.year
-WHERE
-    aic_h.cc = eic.cc AND
-    aic_p.cc != eic.cc AND
-    (
-        (protag.medal = 'Gold' AND home.medal = 'Silver') OR
-        (protag.medal = 'Gold' AND home.medal = 'Bronze') OR
-        (protag.medal = 'Silver' AND home.medal = 'Bronze')
-    );
+SELECT eic1.year AS year1, eic1.cc AS cc1, eic2.year AS year2, eic2.cc AS cc2
+FROM FollowedBy AS fb
+    JOIN EditionIsInCountry AS eic1   ON fb.prev=eic1.year
+    JOIN IsInContinent AS cic1        ON eic1.cc=cic1.cc
+    JOIN EditionIsInCountry AS eic2   ON fb.next=eic2.year
+    JOIN IsInContinent AS cic2        ON eic2.cc=cic2.cc
+WHERE cic1.continent=cic2.continent;
 ```
-
-*(N.B.: l'implementazione SQL raggruppa la disgiunzione in maniera più concisa, ma la query è comunque equivalente.)*
 
 ### Atleti che vincono una medaglia nello stesso sport in due continenti diversi. I due continenti devono essere diversi dal proprio, e l'atleta deve aver giocato per la stessa nazione entrambe le volte.
 
@@ -100,33 +91,4 @@ WHERE
     (tm.gold = 0 OR tm.gold = 1)
     AND tm.year = 2012
 ORDER BY ic.class;
-```
-
-Al solo scopo di contare meglio, si può fare un'altra query SQL espansa con COUNT e GROUP BY.
-
-``` SQL
-SELECT ic.class, COUNT(DISTINCT ic.cc)
-FROM GotTotalMedals AS tm
-    JOIN HadIncomeClass AS ic ON tm.cc = ic.cc AND tm.year = ic.year
-WHERE
-    tm.gold > 2
-    AND tm.year = 2012
-GROUP BY ic.class
-ORDER BY ic.class;
-```
-
-### Trovare le coppie di edizioni consecutive che si sono svolte nello stesso continente
-
-*(Non è una query sugli atleti, stavolta è più sulle edizioni e sulla geografia. La vorrei perché sugli atleti ne ho già parecchie. Può fare da quinta query, oppure sostituirsi a una sugli atleti.)*
-
-&exist; continent . FollowedBy(year1, year2) &and; EditionIsInCountry(year1, cc1) &and; IsInContinent(cc1, continent) &and; EditionIsInCountry(year2, cc2) &and; IsInContinent(cc2, continent)
-
-``` SQL
-SELECT eic1.year AS year1, eic1.cc AS cc1, eic2.year AS year2, eic2.cc AS cc2
-FROM FollowedBy AS fb
-    JOIN EditionIsInCountry AS eic1   ON fb.prev=eic1.year
-    JOIN IsInContinent AS cic1        ON eic1.cc=cic1.cc
-    JOIN EditionIsInCountry AS eic2   ON fb.next=eic2.year
-    JOIN IsInContinent AS cic2        ON eic2.cc=cic2.cc
-WHERE cic1.continent=cic2.continent;
 ```

@@ -93,3 +93,26 @@ WHERE
 ```
 
 Sta query non s'ha da fare. Anche limitandoci a un singolo anno, impiega comunque circa un minuto. Senza la limitazione, impiega un tempo non determinato E si pappa tutto lo spazio su disco come cache. Nessuno dei due casi è adatto all'esecuzione rapida in fase di presentazione/demo. E limitare a un anno snatura un po' la query.
+
+### Atleti tali che, giocando al di fuori della propria nazione, si sono piazzati sul podio meglio di un atleta che giocava in casa, anch'esso sul podio nello stesso evento.
+
+(&exist; id_home_guy, year, sport, event, medal_p, medal_h, other_cc, home_cc . ParticipatedWithResults(id_protagonist_guy, year, sport, event, medal_p) &and; ParticipatedWithResults(id_home_guy, year, sport, event, medal_h) &and; EditionIsInCountry(year, home_cc) &and; AthleteWasFromCountry(id_home_guy, year, home_cc) &and; AthleteWasFromCountry(id_protagonist_guy, year, other_cc) &and; &not; (other_cc = home_cc) &and; medal_p = "Gold" &and; medal_h = "Silver") &or; (&exist; ... &and; medal_p = "Gold" &and; medal_h = "Bronze") &or; (&exist; ... &and; medal_p = "Silver" &and; medal_h = "Bronze") *(Unione di query congiuntive)* *(N.B.: Richiediamo anche al padrone di casa di aver vinto una medaglia per limitarci a rivali comunque "competenti", credo che avere un atleta in casa fuori dal podio sia praticamente scontato per tutto. Quindi, evitiamo un numero eccessivo di risultati.)*
+
+``` SQL
+SELECT DISTINCT protag.id, hn.name
+FROM
+    ParticipatedWithResults AS protag
+        JOIN ParticipatedWithResults AS home    ON protag.year = home.year AND protag.sport = home.sport AND protag.event = home.event
+        JOIN HasName AS hn                      ON protag.id = hn.what
+        JOIN EditionIsInCountry AS eic          ON home.year = eic.year
+        JOIN AthleteWasFromCountry AS aic_p     ON protag.id = aic_p.id AND protag.year = aic_p.year
+        JOIN AthleteWasFromCountry AS aic_h     ON home.id = aic_h.id AND home.year = aic_h.year
+WHERE
+    aic_h.cc = eic.cc AND
+    aic_p.cc != eic.cc AND
+    (
+        (protag.medal = 'Gold' AND home.medal = 'Silver') OR
+        (protag.medal = 'Gold' AND home.medal = 'Bronze') OR
+        (protag.medal = 'Silver' AND home.medal = 'Bronze')
+    );
+```
